@@ -1,0 +1,6 @@
+Accepted Structure:  shape/2021-12-28/figures/hsa-mir-892a_rep2-2_m12_3.ct
+Predicted Structure: resources/RNAstructure/hsa-mir-892a.ct
+Score of Predicted Structure 1:
+Sensitivity: 32 / 37 = 86.49%
+PPV:         32 / 43 = 74.42%
+

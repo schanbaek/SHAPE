@@ -1,0 +1,11 @@
+from os import listdir
+ALLEPS = [ f.replace('.eps','') for f in listdir('.') if f.endswith('eps') ]
+
+rule all:
+    input: expand('{sample}.pdf',sample=ALLEPS)
+
+
+rule epspdf:
+    input: '{sample}.eps'
+    output: '{sample}.pdf'
+    shell: 'epspdf {input}'

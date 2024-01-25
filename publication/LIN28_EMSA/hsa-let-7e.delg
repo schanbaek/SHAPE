@@ -1,0 +1,55 @@
+Thermodynamic details for structure # 1
+	Exterior loop = -1.3
+		Stack = -2.6  for stack of 1-118
+		Stack = -1.7  for stack of 2-117
+		Stack = -2.5  for stack of 3-116
+		Stack = -2.8  for stack of 4-115
+		Stack = -4.2  for stack of 5-114
+	Helix total = -13.8
+	Internal/bulge = 2.8  for closure of 6-113	Size = 5
+		Stack = -2.7  for stack of 10-110
+		Stack = -3.9  for stack of 11-109
+	Helix total = -6.6
+	Internal/bulge = 2.3  for closure of 12-108	Size = 4
+		Stack = -5.2  for stack of 14-104
+		Stack = -4.3  for stack of 15-103
+		Stack = -5.2  for stack of 16-102
+	Helix total = -14.7
+	Internal/bulge = 1.2  for closure of 17-101	Size = 4
+		Stack = -5.4  for stack of 20-98
+	Helix total = -5.4
+	Internal/bulge = 0.5  for closure of 21-97	Size = 2
+		Stack = -4.4  for stack of 23-95
+		Stack = -5.1  for stack of 24-94
+	Helix total = -9.5
+	Internal/bulge = 1.9  for closure of 25-93	Size = 4
+		Stack = -2.4  for stack of 28-90
+		Stack = -3.8  for stack of 29-89
+	Helix total = -6.2
+	Internal/bulge = -1.4  for closure of 30-88	Size = 2
+		Stack = -3.4  for stack of 32-86
+		Stack = -4.3  for stack of 33-85
+		Stack = -5.3  for stack of 34-84
+		Stack = -4.4  for stack of 35-83
+		Stack = -4.2  for stack of 36-82
+		Stack = -5.5  for stack of 37-81
+		Stack = -4.5  for stack of 38-80
+		Stack = -2.4  for stack of 39-79
+		Stack = -3.6  for stack of 40-78
+		Stack = -4.5  for stack of 41-77
+		Stack = -3.6  for stack of 42-76
+		Stack = -3.1  for stack of 43-75
+		Stack = -3.0  for stack of 44-74
+		Stack = -3.1  for stack of 45-73
+		Stack = -2.7  for stack of 46-72
+	Helix total = -57.6
+	Internal/bulge = 1.3  for closure of 47-71	Size = 1 BP stack across bulge = -2.1
+		Stack = -2.5  for stack of 49-70
+	Helix total = -2.5
+	Hairpin = 5.9  for closure of 50-69
+
+
+	Total energy = -103.1
+
+
+

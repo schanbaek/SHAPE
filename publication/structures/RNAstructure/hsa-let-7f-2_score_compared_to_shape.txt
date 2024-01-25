@@ -1,0 +1,6 @@
+Accepted Structure:  shape/2021-12-28/figures/hsa-let-7f-2_rep2-2_m18_1.ct
+Predicted Structure: resources/RNAstructure/hsa-let-7f-2.ct
+Score of Predicted Structure 1:
+Sensitivity: 41 / 46 = 89.13%
+PPV:         41 / 49 = 83.67%
+

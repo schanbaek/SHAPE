@@ -1,0 +1,61 @@
+Thermodynamic details for structure # 1
+	Exterior loop = -1.9
+		Stack = -3.9  for stack of 118-125
+	Helix total = -3.9
+	Hairpin = 4.1  for closure of 119-124
+		Stack = -3.9  for stack of 1-117
+		Stack = -4.4  for stack of 2-116
+	Helix total = -8.3
+	Internal/bulge = 3.2  for closure of 3-115	Size = 1 BP stack across bulge = -0.6
+		Stack = -2.3  for stack of 5-114
+		Stack = -3.0  for stack of 6-113
+	Helix total = -5.3
+	Internal/bulge = 3.4  for closure of 7-112	Size = 8
+		Stack = -2.3  for stack of 13-108
+		Stack = -2.2  for stack of 14-107
+		Stack = -4.4  for stack of 15-106
+		Stack = -4.4  for stack of 16-105
+	Helix total = -13.3
+	Internal/bulge = 2.3  for closure of 17-104	Size = 1 BP stack across bulge = -1.5
+		Stack = -3.9  for stack of 18-102
+		Stack = -2.9  for stack of 19-101
+		Stack = -4.1  for stack of 20-100
+		Stack = -4.0  for stack of 21-99
+		Stack = -5.3  for stack of 22-98
+		Stack = -5.1  for stack of 23-97
+		Stack = -3.4  for stack of 24-96
+	Helix total = -28.7
+	Internal/bulge = 3.2  for closure of 25-95	Size = 1 BP stack across bulge = -0.6
+		Stack = -2.7  for stack of 27-94
+		Stack = -3.9  for stack of 28-93
+		Stack = -3.4  for stack of 29-92
+		Stack = -0.8  for stack of 30-91
+		Stack = -3.1  for stack of 31-90
+		Stack = -3.6  for stack of 32-89
+		Stack = -3.9  for stack of 33-88
+		Stack = -3.2  for stack of 34-87
+		Stack = -3.7  for stack of 35-86
+		Stack = -4.3  for stack of 36-85
+		Stack = -3.4  for stack of 37-84
+		Stack = -2.4  for stack of 38-83
+		Stack = -4.1  for stack of 39-82
+		Stack = -4.4  for stack of 40-81
+		Stack = -2.4  for stack of 41-80
+		Stack = -2.4  for stack of 42-79
+		Stack = -3.6  for stack of 43-78
+		Stack = -3.9  for stack of 44-77
+		Stack = -3.9  for stack of 45-76
+		Stack = -2.6  for stack of 46-75
+	Helix total = -65.7
+	Internal/bulge = 6.0  for closure of 47-74	Size = 15
+		Stack = -4.8  for stack of 51-61
+		Stack = -4.6  for stack of 52-60
+		Stack = -2.4  for stack of 53-59
+	Helix total = -11.8
+	Hairpin = 5.9  for closure of 54-58
+
+
+	Total energy = -110.8
+
+
+

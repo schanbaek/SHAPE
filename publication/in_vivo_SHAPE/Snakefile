@@ -1,0 +1,66 @@
+SAMPLES = ['p1_denat_rep1',
+ 'p1_denat_rep2',
+ 'p1_minus_rep1',
+ 'p1_minus_rep2',
+ 'p1_plus_rep1',
+ 'p1_plus_rep2',
+ 'p2_denat_rep1',
+ 'p2_denat_rep2',
+ 'p2_minus_rep1',
+ 'p2_minus_rep2',
+ 'p2_plus_rep1',
+ 'p2_plus_rep2']
+KDSAMPLES = ['%s_srsf3kd'%sample for sample in SAMPLES]
+NCORE = 2
+REFERENCE = 'reference/amplicons'
+
+
+rule all:
+    input: #expand('rawdata/{sample}.fastq.gz',sample=KDSAMPLES),
+           #expand('alignments/{sample}.sam',sample=NCSAMPLES),
+           #expand('mutation_strings/{sample}.done',sample=SAMPLES),
+           expand('counted_mutations/{sample}.done',sample=KDSAMPLES),
+
+
+rule fastq_dump:
+    input: 'rawdata/{sample}.sra'
+    output: 'rawdata/{sample}.fastq'
+    shell: 'fastq-dump {input} -O rawdata/'
+
+rule compress:
+    input: '{file}'
+    output: '{file}.gz'
+    shell: 'gzip {input}'
+
+rule align:
+    input: 'rawdata/{sample}.fastq.gz'
+    output: 'alignments/{sample}.sam'
+    shell: 'bowtie2 -p {NCORE} -q --local --mp 5,1 --rdg 5,1 --rfg 5,1 -N 1 --no-unal --norc -a\
+                    -x {REFERENCE} -U {input} > {output}'
+
+rule parse_alignments:
+    input: 'alignments/{sample}.sam'
+    output: 'mutation_strings/{sample}.done'
+    run:
+        shell('parseAlignment -combine_strands -deletion_masking -remove_ambig_del \
+                              -min_map_qual 0 -ref_seqs {REFERENCE}.fa -file_in {input} \
+                              -out_folder mutation_strings/')
+        shell('touch {output}')
+
+rule count_mutations:
+    input: 'mutation_strings/{sample}.done'
+    output: 'counted_mutations/{sample}.done'
+    run:
+        sample = wildcards.sample
+        target,cond = sample.split('_')[:2]
+        rnas = ['p1_271_829','p2_1_453']
+        for rna in rnas:
+            inp = 'mutation_strings/%s_%s.txt'%(sample,rna)
+            out = 'counted_mutations/%s_%s.csv'%(sample,rna)
+            shell('countMutations -file_in {inp} -ref_seqs {REFERENCE}.fa -sample_name {cond} \
+                                  -min_phred 0 -target_name {rna} -file_out {out}')
+        shell('touch {output}')
+
+
+
+# vim: et syntax=snakemake

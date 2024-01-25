@@ -1,0 +1,15 @@
+DATA	SOURCE	LAST_UPDATED
+mirgenedb_v1.gff	gff file for MirGeneDB 1.0 is not available online anymore (for 2.1, https://mirgenedb.org/gff/hsa?sort=pos&all=1)	2024-01-11
+mirgenedb_v2.gff        gff file for MirGeneDB 2.0 is not available online anymore (for 2.1, https://mirgenedb.org/gff/hsa?sort=pos&all=1)      2024-01-11
+human_mirbase-v21.gff3	gff file for miRBase v21 is not available online anymore (for v22, https://mirbase.org/download/hsa.gff3)		2024-01-11
+Kim2021_TableS2.xlsx	https://ars.els-cdn.com/content/image/1-s2.0-S1097276521005451-mmc3.xlsx	2024-01-11
+Kim2021_TableS3.xlsx	https://ars.els-cdn.com/content/image/1-s2.0-S1097276521005451-mmc4.xlsx	2024-01-23
+Kim2021_TableS6.xlsx	https://ars.els-cdn.com/content/image/1-s2.0-S1097276521005451-mmc7.xlsx	2024-01-23
+controls	TableS2__Constructs_used_in_this_study	2024-01-11
+Constructs.fa	TableS2__Constructs_used_in_this_study  2024-01-11
+Rat2023_amplicon_seqs.fa	https://www.embopress.org/doi/full/10.15252/embr.202256021, deduced from primers	2024-01-24
+Roden2017_TableS5.xls	https://genome.cshlp.org/content/27/3/374.longi
+bound_frac.tsv	https://www.sciencedirect.com/science/article/pii/S1097276518305045?via%3Dihub, Fig S2E	2024-01-25
+Kwon2019_var_processing.csv TableSub__Variant_processing_Kwon2019.ipynb, https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117600	2024-01-25
+Kim2019_aqseq_rpm.txt	personally received from H. Kim, may be the one at https://0-www-ncbi-nlm-nih-gov.brum.beds.ac.uk/geo/query/aicc.cgi	2024-01-25
+Nguyen2018_rpm.csv	https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi	2024-01-25
