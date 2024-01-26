@@ -1,0 +1,67 @@
+
+## Samples
+SAMPLES = [ 'clv_1', 'input_1', 'dict_1', 'dict_2' ]
+
+## Common sequences
+COMMON1 = 'AGGGTCTACCGGGCCACCGC'
+COMMON2 = 'CCCCAGGTGTGTGGTTTTTA'
+ADAPT3 = 'TGGAATTCTCGGGTGCCAAGG'
+
+## Preprocessing
+MINQUAL = 30
+MINQUALIFIED = 90
+MINLEN = 25
+MAXLEN = 35
+RANDLEN = 4
+CORES = 4
+
+######################################################################################
+
+
+rule all:
+    input: 'data/dict.fastq.gz',
+           #'cuta/input.fastq.gz', 'data/input.fastq.gz',
+           'data/clv.fastq.gz',
+
+rule qc_dict:
+    input: 'rawdata/dict.fastq.gz'
+    output: 'data/dict.fastq.gz'
+    shell: 'zcat {input} | \
+            fastq_quality_filter -Q33 -q {MINQUAL} -p {MINQUALIFIED} - | \
+            cutadapt -j {CORES} -a {ADAPT3} -m {MAXLEN} - | \
+            gzip -c - > {output}'
+
+
+rule cutadapt_input:
+    input: 'rawdata/input_1.fastq.gz'
+    output: 'cuta/input.fastq.gz'
+    shell: 'zcat {input} | \
+            cutadapt -j {CORES} -a {COMMON1} --trimmed-only -m {MINLEN} -M {MAXLEN} - | \
+            gzip -c - > {output}'
+
+
+rule qc_input:
+    input: 'cuta/input.fastq.gz'
+    output: 'data/input.fastq.gz'
+    shell: 'zcat {input} | \
+            fastq_quality_filter -Q33 -q {MINQUAL} -p 100 - | \
+            gzip -c - > {output}'
+
+
+rule cutadapt_clv:
+    input: 'rawdata/clv_1.fastq.gz'
+    output: 'cuta/clv.fastq.gz'
+    shell: 'zcat {input} | \
+            cutadapt -j {CORES} -a {ADAPT3} --trimmed-only -m 30 - | \
+            gzip -c - > {output}'
+
+
+rule qc_clv:
+    input: 'cuta/clv.fastq.gz'
+    output: 'data/clv.fastq.gz'
+    shell: 'zcat {input} | \
+            fastq_quality_filter -Q33 -q {MINQUAL} -p 95 - | \
+            cutadapt -j {CORES} -u -{RANDLEN} - | \
+            gzip -c - > {output}'
+
+# vim: et syntax=snakemake
