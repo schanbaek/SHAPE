@@ -23,3 +23,8 @@ S. Chan Baek1,2,4, Boseon Kim1,2,4, Harim Jang1,2,4, Kijun Kim1,2,†, Il-Soo Pa
 ### Summary
 
 MicroRNA (miRNA) maturation is critically dependent on structural features of primary transcripts (pri-miRNAs). However, the scarcity of determined pri-miRNA structures has limited our understanding of miRNA maturation. Here we employed SHAPE-MaP, a high-throughput RNA structure probing method, to unravel the secondary structures of 476 high-confidence human pri-miRNAs. Our SHAPE-based structures diverge substantially from those inferred solely from computation, particularly in the apical loop and basal segments, underlining the need for experimental data in RNA structure prediction. By comparing the structures with high-throughput processing data, we determined the optimal structural features of pri-miRNAs. The sequence determinants are influenced substantially by their structural contexts. Moreover, we identified an element termed the bulged GWG motif (bGWG) with a 3′ bulge in the lower stem, which promotes processing. Our structure-function mapping better annotates the determinants of pri-miRNA processing and offers practical implications for designing small hairpin RNAs and predicting the impacts of miRNA mutations.
+
+
+
+## Contact
+[S. Chan Baek](bsc0371@gmail.com)
