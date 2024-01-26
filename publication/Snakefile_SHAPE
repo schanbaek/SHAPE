@@ -1,0 +1,171 @@
+#import sys; sys.path.append('/casa/bsc/notebooks/2_Structure-of-pri')
+#from os import listdir
+from Bio import SeqIO
+
+## Samples
+LIBRARIES = [ 'rep1', 'rep2-1', 'rep2-2', 'rep2-3' ]
+CONDITIONS = [ '+1m7', '-1m7', 'dc' ]
+SAMPLES = [ '%s_%s' % (lib, condition) for lib in LIBRARIES for condition in CONDITIONS ]
+ALLSAMPLES = [ '%s_R%s' % (sample, read) for sample in SAMPLES for read in '12' ]
+
+## Preprocessing
+COMMON5 = 'GCCTATTCAGTTACAGCG'
+COMMON3 = 'CGTACTGAAGCTAGCAAC'
+COMMON5_RC = 'CGCTGTAACTGAATAGGC'
+COMMON3_RC = 'GTTGCTAGCTTCAGTACG'
+TRIM5 = 11
+TRIM3 = 130
+MINQUAL = 25
+MINQUALIFIED = 80 # this is minimized as we replace low quality bases with N
+RANDLEN = 6
+ADAPT_ERR = 0.3
+MINLEN = 70
+NCORE = 2
+
+## Alignment
+MULTIMAP = 5
+MINMAPQ = 2
+REFERENCE = 'resources/bowtie2_ref/200722_construct'
+
+## ShapeMapper
+FILE_LIMIT = 5000
+
+## RNAs
+ALLRNAS = [ s.id for s in SeqIO.parse('%s.fa'%REFERENCE, 'fasta') ]
+
+
+###############################################################################################
+
+
+rule all:
+    input: #expand('preprocessing/cuta/{sample}.rnames', sample=SAMPLES),
+           #expand('preprocessing/alignments/{sample}.sam', sample=SAMPLES),
+           #expand('shape/{lib}/mutation_strings/{cond}.done', lib=LIBRARIES, cond=CONDITIONS),
+           #expand('shape/{lib}/counted_mutations/{cond}.done', lib=LIBRARIES, cond=CONDITIONS),
+           expand('resources/RNAfold/{rna}.ct', rna=ALLRNAS),
+           #expand('resources/mfold/{rna}.ct', rna=ALLRNAS)
+
+
+#####################################################################################
+
+rule list_read_names:
+    input: '{sample,R+}.fq.gz'
+    output: temp('{sample}.rnames')
+    shell: 'zcat {input} | \
+            awk "NR % 4 == 1" - | cut -d " " -f1 - | cut -c 2- - | \
+            sort - > {output}'
+
+
+rule intersect_read_names:
+    input: '{sample}_R1.rnames', '{sample}_R2.rnames'
+    output: '{sample, [^R]+}.rnames'
+    shell: 'comm -12 {input[0]} {input[1]} > {output}'
+
+
+#rule decomp:
+#    input: 'alignments/{sample}.bam'
+#    output: temp('alignments/{sample}.sam')
+#    shell: 'samtools view {input} > {output}'
+
+
+#####################################################################################
+
+
+rule qc_stats:
+    input: 'rawdata/{sample}.fastq.gz'
+    output: 'preprocessing/qc/{sample}.qstats.txt.gz'
+    shell: 'zcat {input} | \
+            fastx_quality_stats -Q33 - | \
+            gzip -c - > {output}'
+
+
+rule quality_filter:
+    input: 'rawdata/{sample}.fastq.gz'
+    output: 'preprocessing/qc/{sample}.fq.gz'
+    shell: 'zcat {input} | \
+            fastx_trimmer -Q33 -f {TRIM5} -l {TRIM3} - | \
+            fastq_quality_filter -Q33 -q {MINQUAL} -p {MINQUALIFIED} - | \
+            gzip -c - > {output}'
+
+
+rule discard_reads_wo_comseq_R1:
+    input: 'preprocessing/qc/{sample,[^R]+}_R1.fq.gz'
+    output: 'preprocessing/cuta/{sample,[^R]+}_R1.fq.gz'
+    shell: 'zcat {input} | \
+            cutadapt -j {NCORE} -g {COMMON5} -a {COMMON3} -e {ADAPT_ERR} -m {MINLEN} --trimmed-only - | \
+            gzip -c - > {output}'
+
+
+rule discard_reads_wo_comseq_R2:
+    input: 'preprocessing/qc/{sample,[^R]+}_R2.fq.gz'
+    output: 'preprocessing/cuta/{sample,[^R]+}_R2.fq.gz'
+    shell: 'zcat {input} | \
+            cutadapt -j {NCORE} -g {COMMON3_RC} -a {COMMON5_RC} -e {ADAPT_ERR} -m {MINLEN} --trimmed-only - | \
+            gzip -c - > {output}'
+
+
+rule collect_valid:
+    input: 'preprocessing/cuta/{sample}.fq.gz'
+    output: 'preprocessing/data/{sample}.fq.gz'
+    run:
+        rnames = 'preprocessing/cuta/%s.rnames' % wildcards.sample[:-len('_R1')]
+        shell('zcat {input} | seqtk subseq - {rnames} | \
+               gzip -c - > {output}')
+
+
+rule align:
+    input: 'preprocessing/data/{sample}_R1.fq.gz', 'preprocessing/data/{sample}_R2.fq.gz'
+    output: 'preprocessing/alignments/{sample}.sam'
+    shell: 'bowtie2 -p {NCORE} -q --end-to-end --mp 5,1 --rdg 5,1 --rfg 5,1 --no-mixed --no-unal --norc \
+                    -x {REFERENCE} -1 {input[0]} -2 {input[1]} | \
+            samtools view -q {MINMAPQ} - > {output}'
+
+
+rule parse_alignments:
+    input: 'preprocessing/alignments/{lib}_{cond}.sam'
+    output: 'shape/{lib}/mutation_strings/{cond}.done'
+    run:
+        shell('ulimit -n {FILE_LIMIT}')
+        shell('parseAlignment -combine_strands -deletion_masking -remove_ambig_del \
+                              -min_map_qual {MINMAPQ} -ref_seqs {REFERENCE}.fa -file_in {input} \
+                              -out_folder shape/{wildcards.lib}/mutation_strings/')
+        shell('touch {output}')
+
+
+rule count_mutations:
+    input: 'shape/{lib}/mutation_strings/{cond}.done'
+    output: 'shape/{lib}/counted_mutations/{cond}.done'
+    run:
+        lib = wildcards.lib
+        cond = wildcards.cond
+        for rna in ALLRNAS:
+            inp = 'shape/%s/mutation_strings/%s_%s_%s.txt' % (lib, lib, cond, rna)
+            out = 'shape/%s/counted_mutations/%s_%s.csv' % (lib, cond, rna)
+            shell('countMutations -file_in {inp} -ref_seqs {REFERENCE}.fa -sample_name {cond} \
+                                  -min_phred {MINQUAL} -target_name {rna} -file_out {out}')
+        shell('touch {output}')
+
+
+
+rule RNAfold:
+    input: 'resources/fasta_files/{rna}.fa'
+    output: 'resources/RNAfold/{rna}.dot'
+    shell: 'RNAfold -i {input} > {output}'
+
+
+rule RNAfold2:
+    input: 'resources/RNAfold/{rna}.adj.dot'
+    output: 'resources/RNAfold/{rna}.ct'
+    shell: 'dot2ct {input} {output}'
+
+
+rule mfold:
+    input: 'resources/fasta_files/{rna}.fa'
+    output: 'resources/mfold/{rna}.ct'
+    run: 
+        ct = '%s.fa.ct' % wildcards.rna
+        shell('UNAFold.pl {input}')
+        shell('mv {ct} {output}')
+
+
+# vim: et syntax=snakemake
