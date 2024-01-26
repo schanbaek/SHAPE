@@ -27,4 +27,5 @@ MicroRNA (miRNA) maturation is critically dependent on structural features of pr
 
 
 ## Contact
-[S. Chan Baek](bsc0371@gmail.com)
+
+S. Chan Baek (bsc0371@gmail.com)
